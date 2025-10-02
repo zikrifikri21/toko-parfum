@@ -41,3 +41,10 @@ export interface User {
     updated_at: string;
     [key: string]: unknown; // This allows for additional properties...
 }
+
+export interface Post {
+    id: string; // Ubah menjadi string untuk UUID
+    title: string;
+    description: string;
+    image?: string; // Gambar bisa jadi opsional saat update
+}
