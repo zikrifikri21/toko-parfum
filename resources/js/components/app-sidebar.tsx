@@ -14,7 +14,7 @@ import { dashboard } from '@/routes';
 import posts from '@/routes/posts';
 import { type NavItem } from '@/types';
 import { Link } from '@inertiajs/react';
-import { LayoutGrid, Milk, QrCode } from 'lucide-react';
+import { LayoutGrid, Milk } from 'lucide-react';
 import AppLogo from './app-logo';
 
 const mainNavItems: NavItem[] = [
@@ -27,11 +27,6 @@ const mainNavItems: NavItem[] = [
         title: 'Postingan Parfum',
         href: posts.index(),
         icon: Milk,
-    },
-    {
-        title: 'Cetak QR Code',
-        href: posts.index(),
-        icon: QrCode,
     },
 ];
 
