@@ -8,17 +8,6 @@ import { Suspense, useState } from 'react';
 const categories = ['botol', 'parfum'];
 
 export default function Page() {
-    const navIcons = [
-        {
-            icon: <Home className="h-5 w-5" />,
-            label: 'Home',
-        },
-        {
-            icon: <Heart className="h-5 w-5" />,
-            label: 'Favorites',
-        },
-    ];
-
     const [searchOpen, setSearchOpen] = useState(false);
     const [tempSearchQuery, setTempSearchQuery] = useState('');
     const [searchQuery, setSearchQuery] = useState('');

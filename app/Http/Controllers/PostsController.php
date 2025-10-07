@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\Posts;
+use App\Models\Products;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use App\Http\Resources\ProductResource;
 use Illuminate\Support\Facades\Storage;
 use App\Http\Requests\Posts\StorePostsRequest;
 
@@ -15,10 +17,10 @@ class PostsController extends Controller
      */
     public function index()
     {
-        $posts = Posts::where('user_id', Auth::id())->get();
+        $products = Products::with('category')->get();
 
         return inertia('posts', [
-            'data' => $posts,
+            'products' => ProductResource::collection($products),
         ]);
     }
 
@@ -44,8 +46,9 @@ class PostsController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(StorePostsRequest $request, Posts $posts)
+    public function update(StorePostsRequest $request, $id)
     {
+        $posts = Products::findOrFail($id);
         $request->validated();
         $path = $posts->image;
 
@@ -58,7 +61,7 @@ class PostsController extends Controller
         }
 
         $posts->update([
-            'title'       => $request->title,
+            'name'        => $request->title,
             'image'       => $path,
             'description' => $request->description,
         ]);

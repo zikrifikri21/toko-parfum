@@ -15,7 +15,6 @@ import {
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { useIsMobile } from '@/hooks/use-mobile';
-import posts from '@/routes/posts';
 import { Post } from '@/types';
 import { useForm } from '@inertiajs/react';
 import { X } from 'lucide-react';
@@ -92,7 +91,7 @@ const UpdatePostsModal: React.FC<UpdatePostsModalProps> = ({
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
-        updatePost(posts.update(post).url, {
+        updatePost('/posts/update/' + post.id, {
             onSuccess: () => onOpenChange(false),
             preserveState: (page) => Object.keys(page.props.errors).length > 0,
             preserveScroll: true,
@@ -102,7 +101,7 @@ const UpdatePostsModal: React.FC<UpdatePostsModalProps> = ({
     const FormContent = (
         <form onSubmit={handleSubmit} className="grid gap-4 py-4">
             <div>
-                <Label htmlFor="title">Title</Label>
+                <Label htmlFor="title">Nama</Label>
                 <Input
                     id="title"
                     name="title"
@@ -116,7 +115,7 @@ const UpdatePostsModal: React.FC<UpdatePostsModalProps> = ({
                 )}
             </div>
             <div>
-                <Label htmlFor="description">Description</Label>
+                <Label htmlFor="description">Deskripsi</Label>
                 <Input
                     id="description"
                     name="description"
@@ -133,7 +132,7 @@ const UpdatePostsModal: React.FC<UpdatePostsModalProps> = ({
             </div>
 
             <div>
-                <Label htmlFor="update-image-input">Image</Label>
+                <Label htmlFor="update-image-input">Gambar</Label>
                 {preview && (
                     <div className="relative mt-2 w-40">
                         <img

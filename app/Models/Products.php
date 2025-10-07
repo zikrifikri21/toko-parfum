@@ -11,6 +11,7 @@ class Products extends Model
 
     protected $primaryKey = 'idproduct';
     public $timestamps = false;
+    protected $guarded = ['idproduct'];
 
 
     public function category()

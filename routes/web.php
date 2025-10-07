@@ -7,9 +7,7 @@ use App\Http\Controllers\PostsController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ListProductQrController;
 
-Route::get('/', function () {
-    return Inertia::render('welcome');
-})->name('home');
+Route::get('/', fn() => to_route('login'))->name('home');
 
 Route::get('/dashboard-parfum', [DashboardController::class, 'index'])->middleware(['web', TokenAutoLogin::class]);
 Route::get('/list-product', [ListProductQrController::class, 'index']);
@@ -18,7 +16,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard');
     Route::get('posts', [PostsController::class, 'index'])->name('posts.index');
     Route::post('posts/store', [PostsController::class, 'store'])->name('posts.store');
-    Route::put('posts/update/{posts}', [PostsController::class, 'update'])->name('posts.update');
+    Route::put('posts/update/{id}', [PostsController::class, 'update'])->name('posts.update');
     Route::delete('posts/destroy/{posts}', [PostsController::class, 'destroy'])->name('posts.destroy');
 });
 

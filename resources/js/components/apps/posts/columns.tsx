@@ -7,7 +7,7 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { Post } from '@/types';
 import { ColumnDef } from '@tanstack/react-table';
-import { ArrowUpDown, EllipsisVertical, Pencil, Trash } from 'lucide-react';
+import { ArrowUpDown, EllipsisVertical, Pencil } from 'lucide-react';
 
 const ShortData = ({
     name,
@@ -61,15 +61,19 @@ export const getColumns = ({
     },
     {
         accessorKey: 'image',
-        header: 'Gambar',
+        header: () => <p className="text-center">Gambar</p>,
         cell: ({ row }) => {
             const image = row.getValue('image') as string;
             return (
-                <div className="flex items-center gap-2">
+                <div className="flex items-center justify-center gap-2">
                     {image ? (
                         // eslint-disable-next-line @next/next/no-img-element
                         <img
-                            src={'/storage/' + image}
+                            src={
+                                image?.startsWith('default')
+                                    ? image
+                                    : `/storage/${image}`
+                            }
                             alt={row.getValue('title') as string}
                             className="h-10 w-10 rounded-md object-cover"
                         />
@@ -108,12 +112,12 @@ export const getColumns = ({
                             >
                                 Edit <Pencil className="h-4 w-4" />
                             </DropdownMenuItem>
-                            <DropdownMenuItem
+                            {/* <DropdownMenuItem
                                 className="flex justify-between"
                                 onClick={() => onDelete(data.id)}
                             >
                                 Hapus <Trash className="h-4 w-4" />
-                            </DropdownMenuItem>
+                            </DropdownMenuItem> */}
                         </DropdownMenuContent>
                     </DropdownMenu>
                 </>

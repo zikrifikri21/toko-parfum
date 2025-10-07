@@ -43,8 +43,10 @@ export interface User {
 }
 
 export interface Post {
-    id: string; // Ubah menjadi string untuk UUID
+    id: string | number; // Ubah menjadi string untuk UUID
+    idproduct: number;
     title: string;
     description: string;
     image?: string; // Gambar bisa jadi opsional saat update
+    category?: string;
 }
