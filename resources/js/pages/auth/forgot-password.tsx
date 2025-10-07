@@ -1,14 +1,14 @@
 // Components
-import PasswordResetLinkController from '@/actions/App/Http/Controllers/Auth/PasswordResetLinkController';
+// import PasswordResetLinkController from '@/actions/App/Http/Controllers/Auth/PasswordResetLinkController';
 import { login } from '@/routes';
 import { Form, Head } from '@inertiajs/react';
-import { LoaderCircle } from 'lucide-react';
+// import { LoaderCircle } from 'lucide-react';
 
-import InputError from '@/components/input-error';
+// import InputError from '@/components/input-error';
 import TextLink from '@/components/text-link';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
+// import { Button } from '@/components/ui/button';
+// import { Input } from '@/components/ui/input';
+// import { Label } from '@/components/ui/label';
 import AuthLayout from '@/layouts/auth-layout';
 
 export default function ForgotPassword({ status }: { status?: string }) {
@@ -26,7 +26,7 @@ export default function ForgotPassword({ status }: { status?: string }) {
             )}
 
             <div className="space-y-6">
-                <Form {...PasswordResetLinkController.store.form()}>
+                {/* <Form {...PasswordResetLinkController.store.form()}>
                     {({ processing, errors }) => (
                         <>
                             <div className="grid gap-2">
@@ -57,7 +57,7 @@ export default function ForgotPassword({ status }: { status?: string }) {
                             </div>
                         </>
                     )}
-                </Form>
+                </Form> */}
 
                 <div className="space-x-1 text-center text-sm text-muted-foreground">
                     <span>Or, return to</span>
