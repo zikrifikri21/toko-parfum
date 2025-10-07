@@ -50,7 +50,7 @@ export function ProductCard({
                         src={
                             post.image?.startsWith('default')
                                 ? post.image
-                                : `/storage/${post.image}`
+                                : `/storage/${post.image}?v=${new Date().getTime()}`
                         }
                         alt={post.title}
                         className="h-full w-full rounded-2xl"
