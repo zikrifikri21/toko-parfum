@@ -22,7 +22,7 @@ import { Form } from '@inertiajs/react';
 import { X } from 'lucide-react';
 import React from 'react';
 
-const CreatePostsModal: React.FC<{}> = () => {
+const CreatePostsModal: React.FC<React.PropsWithChildren> = () => {
     const [open, onOpenChange] = React.useState(false);
     const [preview, setPreview] = React.useState<string | null>(null);
 

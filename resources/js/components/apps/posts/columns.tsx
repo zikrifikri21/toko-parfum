@@ -27,10 +27,7 @@ type ActionHandlers = {
     onEdit: (data: Post) => void;
     onDelete: (id: string) => void;
 };
-export const getColumns = ({
-    onEdit,
-    onDelete,
-}: ActionHandlers): ColumnDef<Post>[] => [
+export const getColumns = ({ onEdit }: ActionHandlers): ColumnDef<Post>[] => [
     {
         accessorKey: 'title',
         header: ({ column }) => {
@@ -67,7 +64,6 @@ export const getColumns = ({
             return (
                 <div className="flex items-center justify-center gap-2">
                     {image ? (
-                        // eslint-disable-next-line @next/next/no-img-element
                         <img
                             src={
                                 image?.startsWith('default')
@@ -76,6 +72,7 @@ export const getColumns = ({
                             }
                             alt={row.getValue('title') as string}
                             className="h-10 w-10 rounded-md object-cover"
+                            loading="lazy"
                         />
                     ) : (
                         <div className="flex h-10 w-10 items-center justify-center rounded-md bg-muted">

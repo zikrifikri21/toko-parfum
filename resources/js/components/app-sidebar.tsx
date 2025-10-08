@@ -14,15 +14,10 @@ import { dashboard } from '@/routes';
 import posts from '@/routes/posts';
 import { type NavItem } from '@/types';
 import { Link } from '@inertiajs/react';
-import { LayoutGrid, Milk } from 'lucide-react';
+import { Milk } from 'lucide-react';
 import AppLogo from './app-logo';
 
 const mainNavItems: NavItem[] = [
-    {
-        title: 'Dashboard',
-        href: dashboard(),
-        icon: LayoutGrid,
-    },
     {
         title: 'Postingan Parfum',
         href: posts.index(),

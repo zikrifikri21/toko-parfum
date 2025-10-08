@@ -53,9 +53,9 @@ export function FavoriteProductsGrid() {
 
                 setProducts(productsData);
                 setLoading(false);
-            } catch (e: any) {
-                console.error('Gagal memuat produk favorit', e);
-                setFetchError(e);
+            } catch (error: unknown) {
+                console.error('Gagal memuat produk favorit', error);
+                setFetchError(error as Error);
                 setLoading(false);
             }
         };

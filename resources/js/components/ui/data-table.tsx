@@ -29,10 +29,11 @@ import {
     TableHeader,
     TableRow,
 } from '@/components/ui/table';
+import { Post } from '@/types';
 
 type TableProps = {
-    data: any;
-    columns: ColumnDef<unknown>[];
+    data: Post[];
+    columns: ColumnDef<Record<string, unknown>>[];
     perPage?: number[];
 };
 
@@ -50,7 +51,7 @@ export function DataTable({ data, columns, perPage }: TableProps) {
 
     const table = useReactTable({
         data,
-        columns: columns,
+        columns: columns as ColumnDef<Post>[],
         onSortingChange: setSorting,
         onColumnFiltersChange: setColumnFilters,
         getCoreRowModel: getCoreRowModel(),

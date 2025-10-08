@@ -1,4 +1,4 @@
-import { DataTable } from '@/components/apps/data-table';
+import { DataTable } from '@/components/ui/data-table';
 import { Post } from '@/types';
 import { Column } from '@tanstack/react-table';
 import React from 'react';

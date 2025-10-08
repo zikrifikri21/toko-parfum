@@ -54,7 +54,7 @@ export function ProductsGrid({
     categoryFilter,
     onClearSearch,
 }: ProductsGridProps) {
-    const { data, size, setSize, isValidating, error, mutate, isLoading } =
+    const { data, setSize, isValidating, error, mutate, isLoading } =
         useSWRInfinite<Pagination>(
             (index, previousPageData) =>
                 getKey(index, previousPageData, searchQuery, categoryFilter),
@@ -65,7 +65,7 @@ export function ProductsGrid({
             },
         );
 
-    const pages = data ?? [];
+    const pages = useMemo(() => data ?? [], [data]);
     const items = useMemo(() => pages.flatMap((p) => p.data), [pages]);
 
     const current = pages.at(-1);

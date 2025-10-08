@@ -66,7 +66,7 @@ const UpdatePostsModal: React.FC<UpdatePostsModalProps> = ({
         } else {
             reset();
         }
-    }, [open, post]);
+    }, [open, post, reset, setData]);
 
     const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];
