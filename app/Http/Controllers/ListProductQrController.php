@@ -25,8 +25,9 @@ class ListProductQrController extends Controller
         }
 
         if ($category) {
+            $category = strtolower($category);
             $productsQuery->whereHas('category', function ($q) use ($category) {
-                $q->where('title', $category);
+                $q->where('name', $category);
             });
         }
 
