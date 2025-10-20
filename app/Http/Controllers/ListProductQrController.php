@@ -2,7 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Products;
+use App\Models\Posts;
+use App\Models\Categories;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use App\Http\Resources\ProductResource;
@@ -13,16 +14,19 @@ class ListProductQrController extends Controller
     {
         $query = $request->input('q');
         $category = $request->input('category');
-        $productsQuery = Products::with('category');
+        $productsQuery = Posts::with('category');
+        $categories = Cache::remember('categories_list', 36000, function () {
+            return Categories::all();
+        });
 
         if ($query) {
-            $productsQuery->where('name', 'LIKE', "%{$query}%")
+            $productsQuery->where('title', 'LIKE', "%{$query}%")
                 ->orWhere('description', 'LIKE', "%{$query}%");
         }
 
         if ($category) {
             $productsQuery->whereHas('category', function ($q) use ($category) {
-                $q->where('name', $category);
+                $q->where('title', $category);
             });
         }
 
@@ -40,7 +44,7 @@ class ListProductQrController extends Controller
         }
 
         return inertia('list-product', [
-            'posts' => ProductResource::collection($products),
+            'categories' => $categories,
         ]);
     }
 
@@ -52,11 +56,11 @@ class ListProductQrController extends Controller
         }
 
         $idArray = explode(',', $ids);
-        $primaryKey = (new Products)->getKeyName();
+        $primaryKey = (new Posts)->getKeyName();
         $cacheKey = 'favorites_' . implode('_', $idArray);
 
         $products = Cache::remember($cacheKey, 3600, function () use ($idArray, $primaryKey) {
-            return Products::with('category')
+            return Posts::with('category')
                 ->whereIn($primaryKey, $idArray)
                 ->get();
         });

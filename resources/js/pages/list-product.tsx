@@ -2,12 +2,21 @@ import { FavoriteProductsGrid } from '@/components/apps/products/favorite-produc
 import { ProductsGrid } from '@/components/apps/products/product-grid';
 import { Spinner } from '@/components/sipnner';
 import { Button } from '@/components/ui/button';
-import { Heart, Home, Search } from 'lucide-react';
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
+import { Filter, Heart, Home, Search } from 'lucide-react';
 import { Suspense, useState } from 'react';
 
-const categories = ['botol', 'parfum'];
+interface Category {
+    id: number;
+    name: string;
+}
 
-export default function Page() {
+export default function Page({ categories }: { categories: Category[] }) {
     const [searchOpen, setSearchOpen] = useState(false);
     const [tempSearchQuery, setTempSearchQuery] = useState('');
     const [searchQuery, setSearchQuery] = useState('');
@@ -86,32 +95,40 @@ export default function Page() {
                     </div>
                 )}
             </header>
-            <div className="mb-3 w-full rounded-xl bg-card p-3 shadow">
-                <h3 className="mb-3 text-sm font-medium">Filter Kategori</h3>
+            <div className="sticky top-16 z-20 mb-3 w-full rounded-xl bg-card p-3 shadow">
                 <div className="flex w-full flex-row flex-wrap gap-3">
-                    <Button
-                        variant={!categoryFilter ? 'default' : 'secondary'}
-                        className={`${!categoryFilter ? '' : 'bg-accent shadow-none'}`}
-                        onClick={() => {
-                            setCategoryFilter(null);
-                        }}
-                    >
-                        Semua
-                    </Button>
-                    {categories.map((cat) => (
-                        <Button
-                            key={cat}
-                            variant={
-                                categoryFilter === cat ? 'default' : 'secondary'
-                            }
-                            className={`${categoryFilter === cat ? '' : 'bg-accent shadow-none'}`}
-                            onClick={() => {
-                                setCategoryFilter(cat);
-                            }}
-                        >
-                            {cat.charAt(0).toUpperCase() + cat.slice(1)}
-                        </Button>
-                    ))}
+                    <DropdownMenu>
+                        <DropdownMenuTrigger asChild>
+                            <Button
+                                size={'sm'}
+                                variant={'default'}
+                                className={`flex items-center justify-between rounded-xl bg-card p-3 text-foreground shadow-none ${categoryFilter ? 'bg-accent' : ''}`}
+                            >
+                                <span className="text-sm font-medium">
+                                    {categoryFilter
+                                        ? categoryFilter
+                                        : 'Filter Kategori'}
+                                </span>
+                                <Filter className="h-4 w-4" />
+                            </Button>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent align="start" sideOffset={-4}>
+                            <DropdownMenuItem
+                                onClick={() => setCategoryFilter(null)}
+                            >
+                                Semua
+                            </DropdownMenuItem>
+                            {categories.map((cat) => (
+                                <DropdownMenuItem
+                                    key={cat.id}
+                                    onClick={() => setCategoryFilter(cat.name)}
+                                >
+                                    {cat.name.charAt(0).toUpperCase() +
+                                        cat.name.slice(1)}
+                                </DropdownMenuItem>
+                            ))}
+                        </DropdownMenuContent>
+                    </DropdownMenu>
                 </div>
             </div>
 
@@ -142,7 +159,6 @@ export default function Page() {
                     </Suspense>
                 )}
             </section>
-
             <nav
                 aria-label="Bottom navigation"
                 className="fixed inset-x-0 bottom-0 z-10 m-4 rounded-2xl bg-background/80 backdrop-blur"
@@ -164,7 +180,6 @@ export default function Page() {
                     </button>
                 </div>
             </nav>
-
             {searchOpen && (
                 <div className="fixed inset-0 z-50 flex items-start justify-center pt-20">
                     <div
@@ -206,5 +221,65 @@ export default function Page() {
                 </div>
             )}
         </main>
+    );
+}
+export function CategoryFilter({
+    categories,
+    categoryFilter,
+    setCategoryFilter,
+}: {
+    categories: Category[];
+    categoryFilter: string | null;
+    setCategoryFilter: (category: string | null) => void;
+}) {
+    return (
+        <div className="mb-4 w-full rounded-xl border border-border bg-card p-4 shadow-sm">
+            <h3 className="mb-3 text-sm font-semibold text-foreground">
+                Filter Kategori
+            </h3>
+            <div className="scrollbar-thin scrollbar-thumb-accent/50 flex w-full gap-2 overflow-x-auto pb-1">
+                <FilterButton
+                    label="Semua"
+                    active={!categoryFilter}
+                    onClick={() => setCategoryFilter(null)}
+                />
+
+                {categories.map((cat) => (
+                    <FilterButton
+                        key={cat.id}
+                        label={
+                            cat.name.charAt(0).toUpperCase() + cat.name.slice(1)
+                        }
+                        active={categoryFilter === cat.name}
+                        onClick={() => setCategoryFilter(cat.name)}
+                    />
+                ))}
+            </div>
+        </div>
+    );
+}
+
+function FilterButton({
+    label,
+    active,
+    onClick,
+}: {
+    label: string;
+    active: boolean;
+    onClick: () => void;
+}) {
+    return (
+        <Button
+            size="sm"
+            variant={active ? 'default' : 'secondary'}
+            onClick={onClick}
+            className={`rounded-full px-4 whitespace-nowrap transition-all ${
+                active
+                    ? 'bg-gradient-to-r from-primary to-primary/80 text-primary-foreground shadow-md'
+                    : 'bg-accent text-foreground shadow-none hover:bg-accent/70'
+            } `}
+        >
+            {label}
+        </Button>
     );
 }

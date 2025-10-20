@@ -25,6 +25,7 @@ class StorePostsRequest extends FormRequest
             'title' => 'required',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
             'description' => 'nullable|string|max:1000',
+            'category_id' => 'required|exists:categories,id',
         ];
     }
 
@@ -37,6 +38,8 @@ class StorePostsRequest extends FormRequest
             'image.max' => 'File gambar tidak boleh lebih dari 2048 kilobyte.',
             'description.string' => 'Deskripsi harus berupa string.',
             'description.max' => 'Deskripsi tidak boleh lebih dari 1000 karakter.',
+            'category_id.required' => 'Bidang kategori harus diisi.',
+            'category_id.exists' => 'Kategori yang dipilih tidak valid.',
         ];
     }
 }

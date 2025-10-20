@@ -30,6 +30,7 @@ import {
     TableRow,
 } from '@/components/ui/table';
 import { Post } from '@/types';
+import { useIsMobile } from '@/hooks/use-mobile';
 
 type TableProps = {
     data: Post[];
@@ -110,7 +111,7 @@ export function DataTable({ data, columns, perPage }: TableProps) {
                 <DropdownMenu>
                     <DropdownMenuTrigger asChild>
                         <Button variant="outline" className="ml-auto">
-                            Columns <ChevronDown />
+                            {useIsMobile() ? '' : 'Tampilkan Columns'} <ChevronDown />
                         </Button>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent align="end">

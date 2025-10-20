@@ -3,8 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Posts;
-use App\Models\Products;
-use Illuminate\Http\Request;
+use App\Models\Categories;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Resources\ProductResource;
 use Illuminate\Support\Facades\Storage;
@@ -17,10 +16,12 @@ class PostsController extends Controller
      */
     public function index()
     {
-        $products = Products::with('category')->get();
+        $products = Posts::with('category')->orderBy('title', 'asc')->get();
+        $categories = Categories::orderBy('name', 'asc')->get();
 
         return inertia('posts', [
             'products' => ProductResource::collection($products),
+            'categories' => $categories
         ]);
     }
 
@@ -38,6 +39,7 @@ class PostsController extends Controller
             'image'       => $path,
             'user_id'     => Auth::id(),
             'description' => $request->description,
+            'category_id' => $request->category_id,
         ]);
 
         return to_route('posts.index');
@@ -48,7 +50,7 @@ class PostsController extends Controller
      */
     public function update(StorePostsRequest $request, $id)
     {
-        $posts = Products::findOrFail($id);
+        $posts = Posts::findOrFail($id);
         $request->validated();
         $path = $posts->image;
 
@@ -64,6 +66,7 @@ class PostsController extends Controller
             'name'        => $request->title,
             'image'       => $path,
             'description' => $request->description,
+            'category_id' => $request->category_id,
         ]);
 
         return to_route('posts.index');

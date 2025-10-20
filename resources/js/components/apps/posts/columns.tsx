@@ -1,13 +1,7 @@
 import { Button } from '@/components/ui/button';
-import {
-    DropdownMenu,
-    DropdownMenuContent,
-    DropdownMenuItem,
-    DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
 import { Post } from '@/types';
 import { ColumnDef } from '@tanstack/react-table';
-import { ArrowUpDown, EllipsisVertical, Pencil } from 'lucide-react';
+import { ArrowUpDown, Pencil, Trash } from 'lucide-react';
 
 const ShortData = ({
     name,
@@ -27,7 +21,10 @@ type ActionHandlers = {
     onEdit: (data: Post) => void;
     onDelete: (id: string) => void;
 };
-export const getColumns = ({ onEdit }: ActionHandlers): ColumnDef<Post>[] => [
+export const getColumns = ({
+    onEdit,
+    onDelete,
+}: ActionHandlers): ColumnDef<Post>[] => [
     {
         accessorKey: 'title',
         header: ({ column }) => {
@@ -54,7 +51,33 @@ export const getColumns = ({ onEdit }: ActionHandlers): ColumnDef<Post>[] => [
                 />
             );
         },
-        cell: ({ row }) => <div>{row.getValue('description')}</div>,
+        cell: ({ row }) => (
+            <div>
+                {row.getValue('description') !== null
+                    ? row.getValue('description')
+                    : '-'}
+            </div>
+        ),
+    },
+    {
+        accessorKey: 'category',
+        header: ({ column }) => {
+            return (
+                <ShortData
+                    name="Kategori"
+                    callback={() =>
+                        column.toggleSorting(column.getIsSorted() === 'asc')
+                    }
+                />
+            );
+        },
+        cell: ({ row }) => (
+            <div className="text-center">
+                {row.getValue('category') !== null
+                    ? row.getValue('category')
+                    : '-'}
+            </div>
+        ),
     },
     {
         accessorKey: 'image',
@@ -92,31 +115,24 @@ export const getColumns = ({ onEdit }: ActionHandlers): ColumnDef<Post>[] => [
             const data = row.original;
             return (
                 <>
-                    <DropdownMenu>
-                        <DropdownMenuTrigger asChild>
-                            <Button variant="ghost">
-                                <EllipsisVertical className="h-4 w-4" />
-                            </Button>
-                        </DropdownMenuTrigger>
-                        <DropdownMenuContent
-                            className="me-4 w-16"
-                            side="bottom"
-                            align="end"
+                    <div className="flex justify-center gap-2">
+                        <Button
+                            size={'sm'}
+                            variant={'secondary'}
+                            className="flex justify-between"
+                            onClick={() => onEdit(data)}
                         >
-                            <DropdownMenuItem
-                                className="flex justify-between"
-                                onClick={() => onEdit(data)}
-                            >
-                                Edit <Pencil className="h-4 w-4" />
-                            </DropdownMenuItem>
-                            {/* <DropdownMenuItem
-                                className="flex justify-between"
-                                onClick={() => onDelete(data.id)}
-                            >
-                                Hapus <Trash className="h-4 w-4" />
-                            </DropdownMenuItem> */}
-                        </DropdownMenuContent>
-                    </DropdownMenu>
+                            Edit <Pencil className="h-4 w-4" />
+                        </Button>
+                        <Button
+                            size={'sm'}
+                            variant={'destructive'}
+                            className="flex justify-between"
+                            onClick={() => onDelete(data.id.toString())}
+                        >
+                            Hapus <Trash className="h-4 w-4" />
+                        </Button>
+                    </div>
                 </>
             );
         },

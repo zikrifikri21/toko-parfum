@@ -1,5 +1,13 @@
 import { Spinner } from '@/components/sipnner';
+import {
+    Dialog,
+    DialogContent,
+    DialogDescription,
+    DialogTitle,
+} from '@/components/ui/dialog';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import Zoom from 'react-medium-image-zoom';
+import 'react-medium-image-zoom/dist/styles.css';
 import useSWRInfinite from 'swr/infinite';
 import { ProductCard, type Post } from './product-card';
 import { ProductCardSkeleton } from './product-card-skeleton';
@@ -114,6 +122,8 @@ export function ProductsGrid({
 
     const isInitialLoading = isLoading;
     const isLoadingMore = isValidating && data;
+    const [openModal, setOpenModal] = useState(false);
+    const [selectedProduct, setSelectedProduct] = useState<Post | null>(null);
 
     return (
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
@@ -127,8 +137,51 @@ export function ProductsGrid({
                     post={p}
                     isFavorite={!!favorites[p.id]}
                     onToggleFavorite={() => toggleFavorite(p.id)}
+                    detailModal={(p) => (
+                        setOpenModal(true),
+                        setSelectedProduct(p)
+                    )}
                 />
             ))}
+
+            {openModal && (
+                <Dialog open={openModal} onOpenChange={setOpenModal}>
+                    <DialogContent className="p-6 shadow-xs">
+                        <DialogTitle>Product Details</DialogTitle>
+                        <DialogDescription>{''}</DialogDescription>
+                        {selectedProduct && (
+                            <div>
+                                <h2 className="mb-4 text-lg font-medium">
+                                    {selectedProduct.title}
+                                </h2>
+                                <Zoom>
+                                    <img
+                                        src={
+                                            typeof selectedProduct.image ===
+                                                'string' &&
+                                            selectedProduct.image.startsWith(
+                                                'default',
+                                            )
+                                                ? selectedProduct.image
+                                                : `/storage/${selectedProduct.image}`
+                                        }
+                                        alt={selectedProduct.title}
+                                        className="mb-4 h-auto w-full rounded-lg"
+                                    />
+                                </Zoom>
+                                <p className="mb-2">
+                                    <strong>Category:</strong>{' '}
+                                    {selectedProduct.category || '-'}
+                                </p>
+                                <p>
+                                    <strong>Description:</strong>{' '}
+                                    {selectedProduct.description}
+                                </p>
+                            </div>
+                        )}
+                    </DialogContent>
+                </Dialog>
+            )}
 
             {error && (
                 <div className="col-span-full rounded-xl border border-destructive/50 bg-destructive/10 p-4 text-sm">

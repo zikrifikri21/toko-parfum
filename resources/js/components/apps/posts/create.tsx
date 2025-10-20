@@ -16,24 +16,49 @@ import {
 } from '@/components/ui/drawer';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from '@/components/ui/select';
 import { useIsMobile } from '@/hooks/use-mobile';
+import { PostsProps } from '@/pages/posts';
 import posts from '@/routes/posts';
-import { Form } from '@inertiajs/react';
-import { X } from 'lucide-react';
+import { useForm } from '@inertiajs/react';
 import React from 'react';
+import ImageUploader from './image-uplader';
 
-const CreatePostsModal: React.FC<React.PropsWithChildren> = () => {
+type CreatePostsModalProps = {
+    categories: PostsProps['categories'];
+};
+
+const CreatePostsModal: React.FC<
+    React.PropsWithChildren<CreatePostsModalProps>
+> = ({ categories }) => {
     const [open, onOpenChange] = React.useState(false);
     const [preview, setPreview] = React.useState<string | null>(null);
 
+    const { data, setData, post, reset } = useForm({
+        title: '',
+        description: '',
+        category_id: '',
+        image: null as File | null,
+    });
+
     const handleOpenChange = (open: boolean) => {
         onOpenChange(open);
-        if (!open) setPreview(null);
+        if (!open) {
+            setPreview(null);
+            reset();
+        }
     };
 
     const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];
         if (file) {
+            setData('image', file);
             const reader = new FileReader();
             reader.onloadend = () => {
                 setPreview(reader.result as string);
@@ -44,56 +69,99 @@ const CreatePostsModal: React.FC<React.PropsWithChildren> = () => {
 
     const removePreview = () => {
         setPreview(null);
+        setData('image', null);
         const input = document.querySelector<HTMLInputElement>(
             'input[name="image"]',
         );
         if (input) input.value = '';
     };
 
+    const handleSubmit = (e: React.FormEvent) => {
+        e.preventDefault();
+        post(posts.store().url, {
+            onSuccess: () => {
+                handleOpenChange(false);
+            },
+        });
+    };
+
     const isMobile = useIsMobile();
 
     const FormContent = (
-        <Form
-            method="POST"
-            action={posts.store()}
+        <form
+            onSubmit={handleSubmit}
             encType="multipart/form-data"
             className="grid gap-4 py-4"
-            onSuccess={() => {
-                onOpenChange(false);
-                setPreview(null);
-            }}
         >
-            <Label>Title</Label>
-            <Input name="title" type="text" />
-            <Label>Description</Label>
-            <Input name="description" type="text" />
+            {/* Title */}
+            <div className="space-y-1">
+                <Label>Title</Label>
+                <Input
+                    name="title"
+                    type="text"
+                    value={data.title}
+                    onChange={(e) => setData('title', e.target.value)}
+                    required
+                />
+            </div>
 
-            <Label>Image</Label>
-            {preview && (
-                <div className="relative w-40">
-                    <img
-                        src={preview}
-                        alt="Preview"
-                        className="rounded-lg border object-cover"
-                    />
-                    <button
-                        type="button"
-                        onClick={removePreview}
-                        className="absolute top-1 right-1 rounded-full bg-black/60 p-1 text-white hover:bg-black/80"
-                    >
-                        <X className="h-4 w-4" />
-                    </button>
-                </div>
-            )}
-            <Input
-                type="file"
-                name="image"
-                accept=".jpg, .jpeg, .png, .gif, .svg"
-                onChange={handleImageChange}
+            {/* Description */}
+            <div className="space-y-1">
+                <Label>Description</Label>
+                <Input
+                    name="description"
+                    type="text"
+                    value={data.description}
+                    onChange={(e) => setData('description', e.target.value)}
+                    required
+                />
+            </div>
+
+            {/* Category */}
+            <div className="space-y-1">
+                <Label>Kategori</Label>
+                <Select
+                    onValueChange={(val) => setData('category_id', val)}
+                    value={data.category_id}
+                >
+                    <SelectTrigger>
+                        <SelectValue placeholder="Pilih kategori" />
+                    </SelectTrigger>
+                    <SelectContent>
+                        {categories.map((category) => (
+                            <SelectItem
+                                key={category.id}
+                                value={String(category.id)}
+                            >
+                                {category.name}
+                            </SelectItem>
+                        ))}
+                    </SelectContent>
+                </Select>
+            </div>
+
+            {/* Image Preview ala Edit */}
+            <ImageUploader
+                id="create-image-input"
+                preview={preview}
+                onChange={(file) => {
+                    if (file) {
+                        setData('image', file);
+                        const reader = new FileReader();
+                        reader.onloadend = () =>
+                            setPreview(reader.result as string);
+                        reader.readAsDataURL(file);
+                    } else {
+                        setData('image', null);
+                        setPreview(null);
+                    }
+                }}
             />
 
-            <Button type="submit">Tambah Postingan</Button>
-        </Form>
+            <Button type="submit" className="w-full">
+                Tambah Postingan
+            </Button>
+        </form>
     );
 
     if (isMobile) {

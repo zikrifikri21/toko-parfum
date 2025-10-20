@@ -2,6 +2,7 @@ import AppLogoIcon from '@/components/app-logo-icon';
 import { home } from '@/routes';
 import { type SharedData } from '@/types';
 import { Link, usePage } from '@inertiajs/react';
+import { Milk } from 'lucide-react';
 import { type PropsWithChildren } from 'react';
 
 interface AuthLayoutProps {
@@ -24,7 +25,7 @@ export default function AuthSplitLayout({
                     href={home()}
                     className="relative z-20 flex items-center text-lg font-medium"
                 >
-                    <AppLogoIcon className="mr-2 size-8 fill-current text-white" />
+                    <Milk className="mr-2 size-8 fill-current text-white dark:text-white" />
                     {name}
                 </Link>
                 {quote && (

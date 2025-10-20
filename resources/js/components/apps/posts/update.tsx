@@ -14,20 +14,30 @@ import {
 } from '@/components/ui/drawer';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from '@/components/ui/select';
 import { useIsMobile } from '@/hooks/use-mobile';
-import { Post } from '@/types';
+import { PostsProps } from '@/pages/posts';
+import { type Post } from '@/types';
 import { useForm } from '@inertiajs/react';
-import { X } from 'lucide-react';
 import React, { useEffect, useState } from 'react';
+import ImageUploader from './image-uplader';
 
 interface UpdatePostsModalProps {
     post: Post;
+    categories: PostsProps['categories'];
     open: boolean;
     onOpenChange: (open: boolean) => void;
 }
 
 const UpdatePostsModal: React.FC<UpdatePostsModalProps> = ({
     post,
+    categories,
     open,
     onOpenChange,
 }) => {
@@ -41,6 +51,7 @@ const UpdatePostsModal: React.FC<UpdatePostsModalProps> = ({
     } = useForm({
         title: post.title || '',
         description: post.description || '',
+        category_id: post.category_id || '',
         image: null as File | null,
         _method: 'PUT',
     });
@@ -57,8 +68,9 @@ const UpdatePostsModal: React.FC<UpdatePostsModalProps> = ({
     useEffect(() => {
         if (open) {
             setData({
-                title: post.title,
-                description: post.description,
+                title: post.title || '',
+                description: post.description || '',
+                category_id: post.category_id || '',
                 image: null,
                 _method: 'PUT',
             });
@@ -91,7 +103,7 @@ const UpdatePostsModal: React.FC<UpdatePostsModalProps> = ({
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
-        updatePost('/posts/update/' + post.id, {
+        updatePost(`/posts/update/${post.id}`, {
             onSuccess: () => onOpenChange(false),
             preserveState: (page) => Object.keys(page.props.errors).length > 0,
             preserveScroll: true,
@@ -99,7 +111,8 @@ const UpdatePostsModal: React.FC<UpdatePostsModalProps> = ({
     };
 
     const FormContent = (
-        <form onSubmit={handleSubmit} className="grid gap-4 py-4">
+        <form onSubmit={handleSubmit} className="grid gap-4 px-2 py-4">
+            {/* Nama */}
             <div>
                 <Label htmlFor="title">Nama</Label>
                 <Input
@@ -114,6 +127,8 @@ const UpdatePostsModal: React.FC<UpdatePostsModalProps> = ({
                     <p className="mt-1 text-sm text-red-500">{errors.title}</p>
                 )}
             </div>
+
+            {/* Deskripsi */}
             <div>
                 <Label htmlFor="description">Deskripsi</Label>
                 <Input
@@ -131,39 +146,49 @@ const UpdatePostsModal: React.FC<UpdatePostsModalProps> = ({
                 )}
             </div>
 
+            {/* 🆕 Kategori */}
             <div>
-                <Label htmlFor="update-image-input">Gambar</Label>
-                {preview && (
-                    <div className="relative mt-2 w-40">
-                        <img
-                            src={preview}
-                            alt="Preview"
-                            className="rounded-lg border object-cover"
-                        />
-                        <button
-                            type="button"
-                            onClick={removePreview}
-                            className="absolute top-1 right-1 rounded-full bg-black/60 p-1 text-white transition-colors hover:bg-black/80"
-                        >
-                            <X className="h-4 w-4" />
-                        </button>
-                    </div>
+                <Label htmlFor="category_id">Kategori</Label>
+                <Select
+                    value={data.category_id?.toString()}
+                    onValueChange={(val) => setData('category_id', val)}
+                >
+                    <SelectTrigger className="mt-1">
+                        <SelectValue placeholder="Pilih kategori" />
+                    </SelectTrigger>
+                    <SelectContent>
+                        {categories.map((cat) => (
+                            <SelectItem key={cat.id} value={cat.id.toString()}>
+                                {cat.name}
+                            </SelectItem>
+                        ))}
+                    </SelectContent>
+                </Select>
+                {errors.category_id && (
+                    <p className="mt-1 text-sm text-red-500">
+                        {errors.category_id}
+                    </p>
                 )}
-                <Input
-                    id="update-image-input"
-                    type="file"
-                    name="image"
-                    accept=".jpg, .jpeg, .png, .gif, .svg"
-                    onChange={handleImageChange}
-                    className="mt-2"
-                />
-                {errors.image && (
-                    <p className="mt-1 text-sm text-red-500">{errors.image}</p>
-                )}
-                <p className="mt-1 text-sm text-gray-500">
-                    Kosongkan jika tidak ingin mengubah gambar.
-                </p>
             </div>
+
+            {/* Gambar */}
+            <ImageUploader
+                id="update-image-input"
+                preview={preview}
+                onChange={(file) => {
+                    if (file) {
+                        setData('image', file);
+                        const reader = new FileReader();
+                        reader.onloadend = () =>
+                            setPreview(reader.result as string);
+                        reader.readAsDataURL(file);
+                    } else {
+                        setData('image', null);
+                        setPreview(null);
+                    }
+                }}
+                note="Kosongkan jika tidak ingin mengubah gambar."
+            />
 
             <Button type="submit" disabled={processing} className="w-full">
                 {processing ? 'Menyimpan...' : 'Update Postingan'}
@@ -174,14 +199,16 @@ const UpdatePostsModal: React.FC<UpdatePostsModalProps> = ({
     if (isMobile) {
         return (
             <Drawer open={open} onOpenChange={onOpenChange}>
-                <DrawerContent>
+                <DrawerContent className="h-full max-h-screen">
                     <DrawerHeader>
                         <DrawerTitle>Update Postingan</DrawerTitle>
                         <DrawerDescription>
                             Form untuk mengubah postingan yang sudah ada.
                         </DrawerDescription>
                     </DrawerHeader>
-                    <div className="p-4">{FormContent}</div>
+                    <div className="h-full max-h-screen overflow-auto p-4">
+                        {FormContent}
+                    </div>
                 </DrawerContent>
             </Drawer>
         );
