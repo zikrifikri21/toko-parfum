@@ -64,10 +64,10 @@
 
     <!-- Canonical & Icons -->
     <link rel="canonical" href="https://sf-toko.com">
-    <link rel="manifest" href="/site.webmanifest">
-    <link rel="icon" href="/favicon.ico" sizes="any">
-    <link rel="icon" href="/favicon.svg" type="image/svg+xml">
-    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+    <link rel="manifest" href="https://sf-toko.com/site.webmanifest">
+    <link rel="icon" href="https://sf-toko.com/favicon.ico" sizes="any">
+    {{-- <link rel="icon" href="https://sf-toko.com/favicon.svg" type="image/svg+xml"> --}}
+    <link rel="apple-touch-icon" href="https://sf-toko.com/apple-touch-icon.png">
 
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=poppins:100,200,300,400,500,600,700,800,900&display=swap"
