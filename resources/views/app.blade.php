@@ -32,30 +32,38 @@
     </style>
 
     <title inertia>{{ config('app.name', 'SF Toko Parfum') }}</title>
+
     <meta name="description"
-        content="SF Parfum - Toko parfum terpercaya yang menghadirkan koleksi parfum original, tahan lama, dan beraroma elegan. Temukan berbagai pilihan parfum pria dan wanita d">
+        content="SF Parfum - Toko parfum terpercaya yang menghadirkan koleksi parfum original, tahan lama, dan beraroma elegan. Temukan berbagai pilihan parfum pria dan wanita dengan harga terbaik di SF Parfum.">
     <meta name="robots" content="index, follow">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="keywords" content="parfume, parfum, pewangi">
+    <meta name="keywords" content="parfum, parfume, toko parfum, parfum pria, parfum wanita, parfum original">
+    <meta name="author" content="SF Toko Parfum">
+    <meta name="theme-color" content="#3B82F6">
 
+    <!-- Open Graph -->
+    <meta property="og:locale" content="id_ID">
     <meta property="og:title" content="SF Parfum">
     <meta property="og:description"
-        content="SF Parfum - Toko parfum terpercaya yang menghadirkan koleksi parfum original, tahan lama, dan beraroma elegan. Temukan berbagai pilihan parfum pria dan wanita d">
-    <meta property="og:image" content="/favicon.ico'">
+        content="SF Parfum - Toko parfum terpercaya yang menghadirkan koleksi parfum original, tahan lama, dan beraroma elegan. Temukan berbagai pilihan parfum pria dan wanita dengan harga terbaik di SF Parfum.">
+    <meta property="og:image" content="https://sf-toko.com/og-image.png">
+    <meta property="og:image:type" content="image/png">
     <meta property="og:url" content="https://sf-toko.com">
     <meta property="og:type" content="website">
     <meta property="og:site_name" content="SF Toko Parfum">
 
+    <!-- Twitter -->
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="SF Parfum">
-    <meta name="twitter:description"
-        content="SF Parfum - Toko parfum terpercaya yang menghadirkan koleksi parfum original, tahan lama, dan beraroma elegan. Temukan berbagai pilihan parfum pria dan wanita d">
-    <meta name="twitter:image" content="/favicon.ico">
+    <meta name="twitter:description" content="SF Parfum - Koleksi parfum original, tahan lama, dan beraroma elegan.">
+    <meta name="twitter:image" content="https://sf-toko.com/og-image.png">
 
-    <meta name="author" content="SF Toko Parfum">
-    <meta name="theme-color" content="#3B82F6">
-    <link rel="canonical" href="">
+    <!-- PWA / Mobile -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
 
+    <!-- Canonical & Icons -->
+    <link rel="canonical" href="https://sf-toko.com">
     <link rel="manifest" href="/site.webmanifest">
     <link rel="icon" href="/favicon.ico" sizes="any">
     <link rel="icon" href="/favicon.svg" type="image/svg+xml">
