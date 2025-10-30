@@ -1,4 +1,5 @@
 import { Heart } from 'lucide-react';
+import { LazyLoadImage } from 'react-lazy-load-image-component';
 export type Post = {
     id: number;
     title: string;
@@ -50,11 +51,16 @@ export function ProductCard({
 
             <div className="flex h-56 items-center justify-center bg-accent/60 mask-b-from-60% mask-b-to-100% p-3 sm:h-64">
                 {/* <Zoom> */}
-                <img
+                <LazyLoadImage
+                    loading="lazy"
+                    effect="blur"
+                    wrapperProps={{
+                        style: { transitionDelay: '1s' },
+                    }}
                     src={
                         post.image?.startsWith('default')
                             ? post.image
-                            : `/storage/${post.image}?v=${new Date().getTime()}`
+                            : `/storage/${post.image}`
                     }
                     alt={post.title}
                     className="h-full w-full rounded-xl object-cover"

@@ -6,11 +6,13 @@ import {
     DialogTitle,
 } from '@/components/ui/dialog';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { LazyLoadImage } from 'react-lazy-load-image-component';
 import Zoom from 'react-medium-image-zoom';
 import 'react-medium-image-zoom/dist/styles.css';
 import useSWRInfinite from 'swr/infinite';
 import { ProductCard, type Post } from './product-card';
 import { ProductCardSkeleton } from './product-card-skeleton';
+import 'react-lazy-load-image-component/src/effects/blur.css';
 
 type Pagination = {
     data: Post[];
@@ -155,7 +157,12 @@ export function ProductsGrid({
                                     {selectedProduct.title}
                                 </h2>
                                 <Zoom>
-                                    <img
+                                    <LazyLoadImage
+                                        className="mb-4 h-auto max-h-[400px] w-full rounded-lg object-cover"
+                                        effect="blur"
+                                        wrapperProps={{
+                                            style: { transitionDelay: '1s' },
+                                        }}
                                         src={
                                             typeof selectedProduct.image ===
                                                 'string' &&
@@ -166,7 +173,7 @@ export function ProductsGrid({
                                                 : `/storage/${selectedProduct.image}`
                                         }
                                         alt={selectedProduct.title}
-                                        className="mb-4 h-auto w-full rounded-lg"
+                                        loading="lazy"
                                     />
                                 </Zoom>
                                 <p className="mb-2">
