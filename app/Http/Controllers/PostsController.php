@@ -63,7 +63,7 @@ class PostsController extends Controller
         }
 
         $posts->update([
-            'name'        => $request->title,
+            'title'       => $request->title,
             'image'       => $path,
             'description' => $request->description,
             'category_id' => $request->category_id,

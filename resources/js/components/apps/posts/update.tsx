@@ -189,6 +189,9 @@ const UpdatePostsModal: React.FC<UpdatePostsModalProps> = ({
                 }}
                 note="Kosongkan jika tidak ingin mengubah gambar."
             />
+            {errors.image && (
+                <p className="text-sm text-red-500">{errors.image}</p>
+            )}
 
             <Button type="submit" disabled={processing} className="w-full">
                 {processing ? 'Menyimpan...' : 'Update Postingan'}

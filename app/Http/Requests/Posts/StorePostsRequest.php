@@ -23,9 +23,9 @@ class StorePostsRequest extends FormRequest
     {
         return [
             'title' => 'required',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
             'description' => 'nullable|string|max:1000',
-            'category_id' => 'required|exists:categories,id',
+            'category_id' => 'required_if:category,null|exists:categories,id',
         ];
     }
 
@@ -34,7 +34,7 @@ class StorePostsRequest extends FormRequest
         return [
             'title.required' => 'Bidang judul harus diisi.',
             'image.image' => 'File harus berupa gambar.',
-            'image.mimes' => 'File harus berupa jpeg, png, jpg, gif, atau svg.',
+            'image.mimes' => 'File harus berupa jpeg, png, atau jpg.',
             'image.max' => 'File gambar tidak boleh lebih dari 2048 kilobyte.',
             'description.string' => 'Deskripsi harus berupa string.',
             'description.max' => 'Deskripsi tidak boleh lebih dari 1000 karakter.',

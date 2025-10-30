@@ -10,7 +10,7 @@ import {
     useReactTable,
     VisibilityState,
 } from '@tanstack/react-table';
-import { ChevronDown } from 'lucide-react';
+import { ChevronDown, ChevronLeft } from 'lucide-react';
 import * as React from 'react';
 
 import { Button } from '@/components/ui/button';
@@ -31,6 +31,7 @@ import {
 } from '@/components/ui/table';
 import { Post } from '@/types';
 import { useIsMobile } from '@/hooks/use-mobile';
+import { ChevronRight } from 'lucide-react';
 
 type TableProps = {
     data: Post[];
@@ -111,7 +112,7 @@ export function DataTable({ data, columns, perPage }: TableProps) {
                 <DropdownMenu>
                     <DropdownMenuTrigger asChild>
                         <Button variant="outline" className="ml-auto">
-                            {useIsMobile() ? '' : 'Tampilkan Columns'} <ChevronDown />
+                            {useIsMobile() ? '' : 'Tampilkan Kolom'} <ChevronDown />
                         </Button>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent align="end">
@@ -220,7 +221,7 @@ export function DataTable({ data, columns, perPage }: TableProps) {
                         onClick={() => table.previousPage()}
                         disabled={!table.getCanPreviousPage()}
                     >
-                        Previous
+                        <ChevronLeft className="mr-2 h-4 w-4" />
                     </Button>
                     <Button
                         variant="outline"
@@ -228,7 +229,7 @@ export function DataTable({ data, columns, perPage }: TableProps) {
                         onClick={() => table.nextPage()}
                         disabled={!table.getCanNextPage()}
                     >
-                        Next
+                        <ChevronRight className="mr-2 h-4 w-4" />
                     </Button>
                 </div>
             </div>
